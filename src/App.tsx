@@ -1,7 +1,8 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { Outlet } from 'react-router-dom';
+import {RouterProvider} from 'react-router-dom';
+import {router} from "./routes";
 
 export function App() {
   return (
@@ -9,7 +10,7 @@ export function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
       </header>
-      <Outlet />
+        <RouterProvider router={router} />
     </div>
   );
 }
