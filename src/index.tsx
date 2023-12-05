@@ -1,11 +1,8 @@
-import { lazy, StrictMode, Suspense } from 'react';
+import { StrictMode, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 
 import { PreloadScreen } from './PreloadScreen';
-
-const App = lazy(
-    () => import('./App').then(module => ({ default: module.App }))
-);
+import { App } from './App';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <StrictMode>

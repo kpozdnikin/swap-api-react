@@ -1,9 +1,9 @@
-import type { UseInfiniteQueryResult } from 'react-query';
-import { useInfiniteQuery } from 'react-query';
+import type { UseInfiniteQueryResult } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import type { AxiosResponse } from 'axios';
 
-import type { ErrorResponse, GetCharactersResponse } from '../api/characters';
-import { getCharacters } from '../api/characters';
+import type { GetCharactersResponse } from '@/api/characters';
+import { getCharacters } from '@/api/characters';
 
 export const getCharactersQueryKey = (searchString?: string) => [
     'characters',
@@ -13,11 +13,16 @@ export const getCharactersQueryKey = (searchString?: string) => [
 
 export const useCharacters = (
     searchString?: string,
-): UseInfiniteQueryResult<AxiosResponse<GetCharactersResponse, ErrorResponse>> =>
+): UseInfiniteQueryResult<AxiosResponse<GetCharactersResponse>> =>
     useInfiniteQuery(getCharactersQueryKey(searchString), () => getCharacters({ searchString }), {
-        getNextPageParam: (lastPage, pages) => {
+        getNextPageParam: (
+            lastPage: AxiosResponse<GetCharactersResponse>,
+            pages: Array<AxiosResponse<GetCharactersResponse>>,
+        ) => {
             if (lastPage.data.next) {
                 return pages.length + 1;
             }
+
+            return pages.length;
         },
     });

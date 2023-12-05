@@ -1,16 +1,30 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "es2020",
     "module": "esnext",
-    "jsx": "react-jsx",
     "moduleResolution": "node",
-    "esModuleInterop": true,
-    "strict": true,
+    "jsx": "react-jsx",
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "resolveJsonModule": true
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "incremental": true,
+    "allowJs": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "outDir": "./dist",
+
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "typeRoots": ["node_modules/@types", "src/types"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx"],
+  "include": ["src", "vite.config.ts", "vite.tunnel.config.ts", "postcss.config.js", "cypress"],
   "exclude": ["node_modules"]
 }
