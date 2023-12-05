@@ -20,6 +20,8 @@
     "no-console": "warn",
     "no-debugger": "warn",
     "no-void": "off",
+    "react/function-component-definition": "off",
+    "no-nested-ternary": "off",
     "padding-line-between-statements":["warn",
       {"blankLine": "always", "prev": "*", "next": "if" },
       {"blankLine": "always", "prev": "*", "next": "return" }],

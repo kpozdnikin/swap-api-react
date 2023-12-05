@@ -1,4 +1,11 @@
 import type { FC } from 'react';
 import React from 'react';
+import { RouterProvider } from 'react-router-dom';
 
-export const App: FC = () => <div>App</div>;
+import { router } from './routes';
+
+export const App = () => (
+    <div>
+        <RouterProvider router={router} />
+    </div>
+)

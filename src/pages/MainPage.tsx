@@ -1,7 +1,9 @@
-import React, {FC, useState} from 'react';
-import {CircularProgress, Stack, Typography} from "@mui/material";
-import {useCharacters} from "../hooks";
-import {CharactersList} from "../features/CharactersList/CharactersList";
+import type { FC } from 'react';
+import React, { useState } from 'react';
+import { CircularProgress, Stack, Typography } from '@mui/material';
+
+import { useCharacters } from '../hooks';
+import { CharactersList } from '../features';
 
 export const MainPage: FC = () => {
     const [searchString, setSearchString] = useState('');
@@ -23,14 +25,15 @@ export const MainPage: FC = () => {
 
     return (
         <Stack>
-            { isLoading ?
+            {isLoading ? (
                 <CircularProgress />
-                : isError ?
-                    <Typography>Error loading characters.</Typography>
-                    : characters?.length ?
-                        <CharactersList characters={characters} />
-                        : <Typography>No characters found.</Typography>
-            }
+            ) : isError ? (
+                <Typography>Error loading characters.</Typography>
+            ) : characters?.length ? (
+                <CharactersList characters={characters} />
+            ) : (
+                <Typography>No characters found.</Typography>
+            )}
         </Stack>
     );
 };
