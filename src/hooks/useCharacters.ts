@@ -11,6 +11,10 @@ export const getCharactersQueryKey = (searchString?: string) => [
     searchString,
 ];
 
+export interface UseCharactersResult {
+    pages: Array<{ data: GetCharactersResponse }>;
+}
+
 export const useCharacters = (
     searchString?: string,
 ): UseInfiniteQueryResult<AxiosResponse<GetCharactersResponse>> =>

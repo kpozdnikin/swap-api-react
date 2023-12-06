@@ -13,15 +13,15 @@ import { useNavigate } from 'react-router-dom';
 import { useInView } from 'react-intersection-observer';
 
 import type { Character } from '@/entities';
+import type { UseCharactersResult } from '@/hooks';
 import { useCharacters } from '@/hooks';
-import type { GetCharactersResponse } from '@/api/characters';
 
 export const CharactersList: FC = () => {
     const navigate = useNavigate();
     const [searchString, setSearchString] = useState<string>('');
     const { data, fetchNextPage, hasNextPage, isFetching } = useCharacters(searchString);
 
-    const characters = (data || []) as { pages: Array<{ data: GetCharactersResponse }> };
+    const characters = (data || []) as UseCharactersResult;
 
     const { ref, inView } = useInView();
 
@@ -54,6 +54,7 @@ export const CharactersList: FC = () => {
             <Grid
                 container
                 spacing={2}
+                data-automation-id='character-list'
             >
                 {characters?.pages?.map((group) =>
                     group.data.results.map((character: Character) => (
@@ -65,6 +66,7 @@ export const CharactersList: FC = () => {
                             md={4}
                         >
                             <Card
+                                data-automation-id='character-card'
                                 sx={{
                                     cursor: 'pointer',
                                     transition: 'transform 0.3s ease-in-out',

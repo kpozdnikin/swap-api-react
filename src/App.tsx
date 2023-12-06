@@ -5,7 +5,15 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { router } from './routes';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            cacheTime: 3600000,
+            networkMode: 'offlineFirst',
+            refetchOnMount: false,
+        },
+    },
+});
 
 export const App: FC = () => (
     <QueryClientProvider client={queryClient}>
