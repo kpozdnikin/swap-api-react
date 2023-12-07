@@ -11,6 +11,8 @@ const queryClient = new QueryClient({
             cacheTime: 3600000,
             networkMode: 'offlineFirst',
             refetchOnMount: false,
+            refetchOnWindowFocus: false,
+            retry: false,
         },
     },
 });
