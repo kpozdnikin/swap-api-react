@@ -1,16 +1,24 @@
+import type { FC } from 'react';
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import {RouterProvider} from 'react-router-dom';
-import {router} from "./routes";
+import { RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-export function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-      </header>
+import { router } from './routes';
+
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            cacheTime: 3600000,
+            networkMode: 'offlineFirst',
+            refetchOnMount: false,
+            refetchOnWindowFocus: false,
+            retry: false,
+        },
+    },
+});
+
+export const App: FC = () => (
+    <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
-    </div>
-  );
-}
+    </QueryClientProvider>
+);

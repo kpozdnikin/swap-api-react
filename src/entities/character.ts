@@ -7,4 +7,5 @@ export type Character = {
     eye_color: string;
     birth_year: string;
     gender: string;
-}
+    url: string;
+};

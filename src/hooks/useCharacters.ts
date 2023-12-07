@@ -1,15 +1,32 @@
-import {useInfiniteQuery, UseInfiniteQueryResult } from "react-query";
-import {ErrorResponse, getCharacters, GetCharactersResponse} from "../api/characters";
-import {AxiosResponse} from "axios";
+import type { UseInfiniteQueryResult } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import type { AxiosResponse } from 'axios';
 
-export const getCharactersQueryKey = (searchString?: string) => ['characters', 'list', searchString];
+import type { GetCharactersResponse } from '@/api/characters';
+import { getCharacters } from '@/api/characters';
 
-export const useCharacters = (searchString?: string): UseInfiniteQueryResult<AxiosResponse<GetCharactersResponse, ErrorResponse>> => {
-    return useInfiniteQuery(getCharactersQueryKey(searchString), () => getCharacters({ searchString }), {
-        getNextPageParam: (lastPage, pages) => {
+export const getCharactersQueryKey = (searchString?: string) => [
+    'characters',
+    'list',
+    searchString,
+];
+
+export interface UseCharactersResult {
+    pages: Array<{ data: GetCharactersResponse }>;
+}
+
+export const useCharacters = (
+    searchString?: string,
+): UseInfiniteQueryResult<AxiosResponse<GetCharactersResponse>> =>
+    useInfiniteQuery(getCharactersQueryKey(searchString), () => getCharacters({ searchString }), {
+        getNextPageParam: (
+            lastPage: AxiosResponse<GetCharactersResponse>,
+            pages: Array<AxiosResponse<GetCharactersResponse>>,
+        ) => {
             if (lastPage.data.next) {
                 return pages.length + 1;
             }
+
+            return pages.length;
         },
     });
-};

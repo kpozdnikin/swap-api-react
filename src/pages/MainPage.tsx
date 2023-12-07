@@ -1,36 +1,15 @@
-import React, {FC, useState} from 'react';
-import {CircularProgress, Stack, Typography} from "@mui/material";
-import {useCharacters} from "../hooks";
-import {CharactersList} from "../features/CharactersList/CharactersList";
+import type { FC } from 'react';
+import React from 'react';
+import { Stack, Typography } from '@mui/material';
 
-export const MainPage: FC = () => {
-    const [searchString, setSearchString] = useState('');
-    const [page, setPage] = useState(1);
+import { CharactersList } from '@/features';
 
-    const { data, isLoading, isError } = useCharacters(searchString, page);
+export const MainPage: FC = () => (
+    <Stack p='32px'>
+        <Typography>Swap test app</Typography>
 
-    if (isLoading) {
-        return <Typography>Loading characters...</Typography>;
-    }
+        <br />
 
-    if (isError) {
-        return <Typography>Error loading characters.</Typography>;
-    }
-
-    console.log('data', data);
-
-    const characters = data?.data?.results;
-
-    return (
-        <Stack>
-            { isLoading ?
-                <CircularProgress />
-                : isError ?
-                    <Typography>Error loading characters.</Typography>
-                    : characters?.length ?
-                        <CharactersList characters={characters} />
-                        : <Typography>No characters found.</Typography>
-            }
-        </Stack>
-    );
-};
+        <CharactersList />
+    </Stack>
+);
