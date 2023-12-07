@@ -11,7 +11,9 @@
     "build": "vite build",
     "serve": "vite preview",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "cypress:open": "cypress open --config defaultCommandTimeout=12000",
+    "test": "cypress run --config defaultCommandTimeout=12000"
   },
   "dependencies": {
     "@emotion/cache": "latest",

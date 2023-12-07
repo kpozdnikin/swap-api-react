@@ -5,7 +5,7 @@ import { Stack, Typography } from '@mui/material';
 import { CharactersList } from '@/features';
 
 export const MainPage: FC = () => (
-    <Stack padding='32px'>
+    <Stack p='32px'>
         <Typography>Swap test app</Typography>
 
         <br />

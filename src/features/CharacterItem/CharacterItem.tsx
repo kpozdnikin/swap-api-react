@@ -1,4 +1,6 @@
-import { Button, Card, CardContent, Grid, Stack, TextField, Typography } from '@mui/material';
+import { Card, CardContent, Grid, IconButton, Stack, TextField, Typography } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
 import type { FC } from 'react';
 import React, { useState } from 'react';
 
@@ -32,7 +34,7 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character }) => {
     return (
         <Card
             data-automation-id='character-item'
-            sx={{ minWidth: '300px' }}
+            sx={{ minWidth: '300px', position: 'relative' }}
         >
             <CardContent>
                 <Stack
@@ -40,23 +42,19 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character }) => {
                     justifyContent='center'
                 >
                     {!tempCharacter ? (
-                        <Button
-                            variant='contained'
-                            color='primary'
-                            style={{ marginBottom: '20px' }}
+                        <IconButton
+                            sx={{ position: 'absolute', right: 1, top: 1 }}
                             onClick={() => setTempCharacter(character)}
                         >
-                            Редактировать
-                        </Button>
+                            <EditIcon />
+                        </IconButton>
                     ) : (
-                        <Button
-                            variant='contained'
-                            color='secondary'
-                            style={{ marginBottom: '20px' }}
+                        <IconButton
+                            sx={{ position: 'absolute', right: 1, top: 1 }}
                             onClick={handleSave}
                         >
-                            Сохранить
-                        </Button>
+                            <SaveIcon />
+                        </IconButton>
                     )}
                 </Stack>
 
