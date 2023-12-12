@@ -6,7 +6,7 @@ import { api } from './axios';
 
 export interface GetCharactersProps {
     searchString?: string;
-    pageParam?: number;
+    pageParam: string;
 }
 
 export interface GetCharactersResponse {
@@ -22,13 +22,11 @@ export interface ErrorResponse {
 
 export const getCharacters = ({
     searchString,
-    pageParam = 1,
+    pageParam = 'https://swapi.dev/api/people',
 }: GetCharactersProps): Promise<AxiosResponse<GetCharactersResponse>> =>
-    api.get<GetCharactersResponse>(`/people/`, {
+    api.get<GetCharactersResponse>(pageParam, {
         params: {
             format: 'json',
-            search: searchString,
-            page: pageParam,
             ...(searchString ? { search: searchString } : {}),
         },
     });

@@ -15,13 +15,15 @@ import { useInView } from 'react-intersection-observer';
 import type { Character } from '@/entities';
 import type { UseCharactersResult } from '@/hooks';
 import { useCharacters } from '@/hooks';
+import { useDebounceState } from '@/hooks/useDebouncedState';
 
 export const CharactersList: FC = () => {
     const navigate = useNavigate();
     const [searchString, setSearchString] = useState<string>('');
-    const { data, fetchNextPage, hasNextPage, isFetching } = useCharacters(searchString);
+    const debouncedSearch = useDebounceState(searchString);
+    const { data, fetchNextPage, hasNextPage, isFetching } = useCharacters(debouncedSearch);
 
-    const characters = (data || []) as UseCharactersResult;
+    const characters = (data || { pages: [] }) as UseCharactersResult;
 
     const { ref, inView } = useInView();
 
@@ -35,10 +37,10 @@ export const CharactersList: FC = () => {
     };
 
     useEffect(() => {
-        if (inView && hasNextPage) {
+        if (inView && !isFetching) {
             void fetchNextPage();
         }
-    }, [inView, hasNextPage, fetchNextPage]);
+    }, [inView, fetchNextPage, isFetching]);
 
     return (
         <>
@@ -56,55 +58,81 @@ export const CharactersList: FC = () => {
                 spacing={2}
                 data-automation-id='character-list'
             >
-                {characters?.pages?.map((group) =>
-                    group.data.results.map((character: Character) => (
-                        <Grid
-                            key={character.url}
-                            item
-                            xs={12}
-                            sm={6}
-                            md={4}
-                        >
-                            <Card
-                                data-automation-id='character-card'
-                                sx={{
-                                    cursor: 'pointer',
-                                    transition: 'transform 0.3s ease-in-out',
-                                    '&:hover': { transform: 'scale(1.05)' },
-                                }}
-                                onClick={() => handleCardClick(character.url)}
+                {characters?.pages?.[0]?.data?.count > 0 ? (
+                    characters.pages.map((group) =>
+                        group.data.results.map((character: Character) => (
+                            <Grid
+                                key={character.url}
+                                item
+                                xs={12}
+                                sm={6}
+                                md={4}
                             >
-                                <CardContent>
-                                    <Typography variant='h5'>{character.name}</Typography>
+                                <Card
+                                    data-automation-id='character-card'
+                                    sx={{
+                                        cursor: 'pointer',
+                                        transition: 'transform 0.3s ease-in-out',
+                                        '&:hover': { transform: 'scale(1.05)' },
+                                    }}
+                                    onClick={() => handleCardClick(character.url)}
+                                >
+                                    <CardContent>
+                                        <Typography variant='h5'>{character.name}</Typography>
 
-                                    <Typography>Height: {character.height}</Typography>
+                                        <Typography>Height: {character.height}</Typography>
 
-                                    <Typography>Mass: {character.mass}</Typography>
+                                        <Typography>Mass: {character.mass}</Typography>
 
-                                    <Typography>Hair Color: {character.hair_color}</Typography>
+                                        <Typography>Hair Color: {character.hair_color}</Typography>
 
-                                    <Typography>Skin Color: {character.skin_color}</Typography>
+                                        <Typography>Skin Color: {character.skin_color}</Typography>
 
-                                    <Typography>Eye Color: {character.eye_color}</Typography>
+                                        <Typography>Eye Color: {character.eye_color}</Typography>
 
-                                    <Typography>Birth Year: {character.birth_year}</Typography>
+                                        <Typography>Birth Year: {character.birth_year}</Typography>
 
-                                    <Typography>Gender: {character.gender}</Typography>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    )),
+                                        <Typography>Gender: {character.gender}</Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        )),
+                    )
+                ) : isFetching ? null : (
+                    <Stack
+                        alignItems='center'
+                        justifyContent='center'
+                        width='100%'
+                        pt='32px'
+                    >
+                        {searchString ? (
+                            <Typography>Search result is empty</Typography>
+                        ) : (
+                            <Typography>Nothing more to load</Typography>
+                        )}
+                    </Stack>
                 )}
 
-                <Stack
-                    ref={ref}
-                    alignItems='center'
-                    justifyContent='center'
-                    width='100%'
-                    height='100px'
-                >
-                    {isFetching ? <CircularProgress /> : null}
-                </Stack>
+                {hasNextPage ? (
+                    <Stack
+                        ref={ref}
+                        alignItems='center'
+                        justifyContent='center'
+                        width='100%'
+                        height='100px'
+                    />
+                ) : null}
+
+                {isFetching ? (
+                    <Stack
+                        alignItems='center'
+                        justifyContent='center'
+                        width='100%'
+                        height='100px'
+                    >
+                        <CircularProgress />
+                    </Stack>
+                ) : null}
             </Grid>
         </>
     );
