@@ -6,7 +6,6 @@ interface ErrorBoundaryState {
     hasError: boolean;
 }
 
-// If your ErrorBoundary takes specific props, define them in an interface
 interface ErrorBoundaryProps {
     children: ReactNode;
 }
@@ -27,9 +26,13 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         const { children } = this.props;
 
         if (hasError) {
-            // Render any custom fallback UI
             return (
-                <Stack>
+                <Stack
+                    alignItems='center'
+                    justifyContent='center'
+                    width='100%'
+                    pt='32px'
+                >
                     <Typography>Something went wrong.</Typography>
                 </Stack>
             );
