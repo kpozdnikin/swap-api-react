@@ -20,7 +20,7 @@ export const useCharacters = (
 ): UseInfiniteQueryResult<AxiosResponse<GetCharactersResponse>> =>
     useInfiniteQuery({
         queryKey: getCharactersQueryKey(searchString),
-        queryFn: ({ pageParam }: { pageParam?: string }) =>
-            getCharacters({ searchString, pageParam }),
+        queryFn: ({ pageParam, signal }: { pageParam?: string, signal?: AbortSignal }) =>
+            getCharacters({ searchString, pageParam, signal }),
         getNextPageParam: (lastPage: AxiosResponse<GetCharactersResponse>) => lastPage.data.next,
     });
