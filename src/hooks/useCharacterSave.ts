@@ -20,7 +20,7 @@ export const useCharacterSave = (): UseCharacterSaveResult => {
         const characterId = characterToSave.url.split('/').filter(Boolean).pop();
 
         if (!characterId) {
-            console.error('cannot find character in the cache');
+            console.error('cannot find target character in the cache');
 
             return;
         }
@@ -30,7 +30,7 @@ export const useCharacterSave = (): UseCharacterSaveResult => {
             queryClient.getQueryData<Character>(characterQueryKey);
 
         if (!characterFromCache) {
-            console.error('cannot find character in the cache');
+            console.error('cannot find target character in the cache');
         }
 
         queryClient.setQueryData(getCharacterQueryKey(characterId), {
