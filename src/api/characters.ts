@@ -2,11 +2,11 @@ import type { AxiosResponse } from 'axios';
 
 import type { Character } from '@/entities';
 
-import { api } from './axios';
+import { api, BASE_URL } from './axios';
 
 export interface GetCharactersProps {
     searchString?: string;
-    pageParam: string;
+    pageParam?: string;
 }
 
 export interface GetCharactersResponse {
@@ -22,9 +22,9 @@ export interface ErrorResponse {
 
 export const getCharacters = ({
     searchString,
-    pageParam = 'https://swapi.dev/api/people',
+    pageParam,
 }: GetCharactersProps): Promise<AxiosResponse<GetCharactersResponse>> =>
-    api.get<GetCharactersResponse>(pageParam, {
+    api.get<GetCharactersResponse>(pageParam || `${BASE_URL}/people`, {
         params: {
             format: 'json',
             ...(searchString ? { search: searchString } : {}),
@@ -38,4 +38,4 @@ export interface GetCharacterProps {
 export const getCharacter = ({
     characterId,
 }: GetCharacterProps): Promise<AxiosResponse<Character>> =>
-    api.get<Character>(`/people/${characterId}`);
+    api.get<Character>(`${BASE_URL}/people/${characterId}`);

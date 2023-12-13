@@ -1,17 +1,27 @@
-import { Card, CardContent, Grid, IconButton, Stack, TextField, Typography } from '@mui/material';
+import {
+    Card,
+    CardContent,
+    CircularProgress,
+    Grid,
+    IconButton,
+    Stack,
+    TextField,
+    Typography,
+} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import type { FC } from 'react';
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import type { Character } from '@/entities';
 import { useCharacterSave } from '@/hooks/useCharacterSave';
+import { useCharacter } from '@/hooks';
 
-interface CharacterItemProps {
-    character: Character;
-}
-
-export const CharacterItem: FC<CharacterItemProps> = ({ character }) => {
+export const CharacterItem: FC = () => {
+    const { itemId } = useParams();
+    const { data, isFetching } = useCharacter(itemId);
+    const character: Character | undefined = data?.data || undefined;
     const [tempCharacter, setTempCharacter] = useState<Character | undefined>();
     const { updateCharacter, updateCharacterList } = useCharacterSave();
 
@@ -31,82 +41,118 @@ export const CharacterItem: FC<CharacterItemProps> = ({ character }) => {
         setTempCharacter(undefined);
     };
 
+    if (isFetching) {
+        return (
+            <Stack
+                alignItems='center'
+                justifyContent='center'
+                width='100%'
+            >
+                <CircularProgress />
+            </Stack>
+        );
+    }
+
+    if (!character) {
+        return (
+            <Stack
+                alignItems='center'
+                justifyContent='center'
+                width='100%'
+            >
+                <CircularProgress />
+            </Stack>
+        );
+    }
+
     return (
         <Card
             data-automation-id='character-item'
             sx={{ minWidth: '300px', position: 'relative' }}
         >
             <CardContent>
-                <Stack
-                    alignItems='center'
-                    justifyContent='center'
-                >
-                    {!tempCharacter ? (
-                        <IconButton
-                            sx={{ position: 'absolute', right: 1, top: 1 }}
-                            onClick={() => setTempCharacter(character)}
-                        >
-                            <EditIcon />
-                        </IconButton>
-                    ) : (
-                        <IconButton
-                            sx={{ position: 'absolute', right: 1, top: 1 }}
-                            onClick={handleSave}
-                        >
-                            <SaveIcon />
-                        </IconButton>
-                    )}
-                </Stack>
-
-                {tempCharacter ? (
-                    <Stack p='32px'>
-                        <TextField
-                            label='Name'
-                            name='name'
-                            value={tempCharacter?.name}
-                            onChange={handleChange}
-                        />
-                    </Stack>
-                ) : (
+                {character ? (
                     <>
-                        <Typography
-                            gutterBottom
-                            variant='h5'
+                        <Stack
+                            alignItems='center'
+                            justifyContent='center'
                         >
-                            {character.name}
-                        </Typography>
+                            {!tempCharacter ? (
+                                <IconButton
+                                    sx={{ position: 'absolute', right: 1, top: 1 }}
+                                    onClick={() => setTempCharacter(character)}
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                            ) : (
+                                <IconButton
+                                    sx={{ position: 'absolute', right: 1, top: 1 }}
+                                    onClick={handleSave}
+                                >
+                                    <SaveIcon />
+                                </IconButton>
+                            )}
+                        </Stack>
 
-                        <Grid
-                            container
-                            spacing={2}
-                        >
-                            <Grid
-                                item
-                                xs={12}
-                                sm={6}
-                            >
-                                <Typography>Height: {character.height}</Typography>
+                        {tempCharacter ? (
+                            <Stack p='32px'>
+                                <TextField
+                                    label='Name'
+                                    name='name'
+                                    value={tempCharacter?.name}
+                                    onChange={handleChange}
+                                />
+                            </Stack>
+                        ) : (
+                            <>
+                                <Typography
+                                    gutterBottom
+                                    variant='h5'
+                                >
+                                    {character.name}
+                                </Typography>
 
-                                <Typography>Mass: {character.mass}</Typography>
+                                <Grid
+                                    container
+                                    spacing={2}
+                                >
+                                    <Grid
+                                        item
+                                        xs={12}
+                                        sm={6}
+                                    >
+                                        <Typography>Height: {character.height}</Typography>
 
-                                <Typography>Hair Color: {character.hair_color}</Typography>
-                            </Grid>
+                                        <Typography>Mass: {character.mass}</Typography>
 
-                            <Grid
-                                item
-                                xs={12}
-                                sm={6}
-                            >
-                                <Typography>Skin Color: {character.skin_color}</Typography>
+                                        <Typography>Hair Color: {character.hair_color}</Typography>
+                                    </Grid>
 
-                                <Typography>Eye Color: {character.eye_color}</Typography>
+                                    <Grid
+                                        item
+                                        xs={12}
+                                        sm={6}
+                                    >
+                                        <Typography>Skin Color: {character.skin_color}</Typography>
 
-                                <Typography>Birth Year: {character.birth_year}</Typography>
+                                        <Typography>Eye Color: {character.eye_color}</Typography>
 
-                                <Typography>Gender: {character.gender}</Typography>
-                            </Grid>
-                        </Grid>
+                                        <Typography>Birth Year: {character.birth_year}</Typography>
+
+                                        <Typography>Gender: {character.gender}</Typography>
+                                    </Grid>
+                                </Grid>
+                            </>
+                        )}
                     </>
+                ) : (
+                    <Stack
+                        alignItems='center'
+                        justifyContent='center'
+                        width='100%'
+                    >
+                        {isFetching ? <CircularProgress /> : <Typography>No character</Typography>}
+                    </Stack>
                 )}
             </CardContent>
         </Card>

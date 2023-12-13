@@ -3,6 +3,7 @@ import React from 'react';
 import { Stack, Typography } from '@mui/material';
 
 import { CharactersList } from '@/features';
+import { ErrorBoundary } from '@/features/ErrorBoundary';
 
 export const MainPage: FC = () => (
     <Stack p='32px'>
@@ -10,6 +11,8 @@ export const MainPage: FC = () => (
 
         <br />
 
-        <CharactersList />
+        <ErrorBoundary>
+            <CharactersList />
+        </ErrorBoundary>
     </Stack>
 );
