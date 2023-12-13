@@ -10,6 +10,9 @@ interface UseCharacterSaveResult {
     updateCharacterList: (character: Character) => void;
 }
 
+// TODO - add cache keeper to fix the case when the updated item locally is newer than on the server
+// that case appears if we try to find something, then open, update, go back and try to find it again.
+// Selected item will go from the server in older version
 export const useCharacterSave = (): UseCharacterSaveResult => {
     const queryClient = useQueryClient();
 
