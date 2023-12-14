@@ -37,10 +37,10 @@ export const CharactersList: FC = () => {
     };
 
     useEffect(() => {
-        if (inView && hasNextPage) {
+        if (inView && hasNextPage && !isFetching) {
             void fetchNextPage();
         }
-    }, [inView, fetchNextPage, hasNextPage]);
+    }, [inView, fetchNextPage, hasNextPage, isFetching]);
 
     return (
         <>

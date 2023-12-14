@@ -1,5 +1,4 @@
 import type { AxiosResponse } from 'axios';
-import axios from 'axios';
 
 import type { Character } from '@/entities';
 
@@ -29,7 +28,6 @@ export const getCharacters = ({
 }: GetCharactersProps): Promise<AxiosResponse<GetCharactersResponse>> =>
     api.get<GetCharactersResponse>(pageParam || `${BASE_URL}/people`, {
         params: {
-            format: 'json',
             ...(searchString ? { search: searchString } : {}),
         },
         signal,
