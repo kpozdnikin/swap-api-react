@@ -20,10 +20,8 @@ import { useDebounceState } from '@/hooks/useDebouncedState';
 export const CharactersList: FC = () => {
     const navigate = useNavigate();
     const [searchString, setSearchString] = useState<string>('');
-    const debouncedSearch = useDebounceState(searchString, 100);
-    const { data, fetchNextPage, hasNextPage, isFetching, isSuccess } = useCharacters(debouncedSearch);
-
-    console.log('other isSuccess', isSuccess);
+    const debouncedSearch = useDebounceState(searchString);
+    const { data, fetchNextPage, hasNextPage, isFetching } = useCharacters(debouncedSearch);
 
     const characters = (data || { pages: [] }) as UseCharactersResult;
 
@@ -39,10 +37,10 @@ export const CharactersList: FC = () => {
     };
 
     useEffect(() => {
-        if (inView && isSuccess) {
+        if (inView && hasNextPage) {
             void fetchNextPage();
         }
-    }, [inView, fetchNextPage, isSuccess]);
+    }, [inView, fetchNextPage, hasNextPage]);
 
     return (
         <>
