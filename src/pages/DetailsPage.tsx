@@ -1,18 +1,14 @@
 import type { FC } from 'react';
-import { Stack, Typography, CircularProgress, IconButton } from '@mui/material';
-import { useParams, useNavigate } from 'react-router-dom';
+import { Stack, IconButton } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-import { useCharacter } from '@/hooks';
-import type { Character } from '@/entities';
 import { CharacterItem } from '@/features/CharacterItem';
+import { ErrorBoundary } from '@/features';
 
 export const DetailsPage: FC = () => {
-    const { itemId } = useParams();
-    const { data, isFetching } = useCharacter(itemId);
     const navigate = useNavigate();
-    const character: Character | null = data?.data || null;
 
     return (
         <Stack
@@ -30,19 +26,9 @@ export const DetailsPage: FC = () => {
 
             <br />
 
-            {isFetching ? (
-                <Stack
-                    alignItems='center'
-                    justifyContent='center'
-                    width='100%'
-                >
-                    <CircularProgress />
-                </Stack>
-            ) : !character ? (
-                <Typography>Character not found.</Typography>
-            ) : (
-                <CharacterItem character={character} />
-            )}
+            <ErrorBoundary>
+                <CharacterItem />
+            </ErrorBoundary>
         </Stack>
     );
 };

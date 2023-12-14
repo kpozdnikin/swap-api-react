@@ -1,12 +1,14 @@
 import type { AxiosResponse } from 'axios';
+import axios from 'axios';
 
 import type { Character } from '@/entities';
 
-import { api } from './axios';
+import { api, BASE_URL } from './axios';
 
 export interface GetCharactersProps {
     searchString?: string;
-    pageParam?: number;
+    pageParam?: string;
+    signal?: AbortSignal;
 }
 
 export interface GetCharactersResponse {
@@ -22,15 +24,15 @@ export interface ErrorResponse {
 
 export const getCharacters = ({
     searchString,
-    pageParam = 1,
+    pageParam,
+    signal,
 }: GetCharactersProps): Promise<AxiosResponse<GetCharactersResponse>> =>
-    api.get<GetCharactersResponse>(`/people/`, {
+    api.get<GetCharactersResponse>(pageParam || `${BASE_URL}/people`, {
         params: {
             format: 'json',
-            search: searchString,
-            page: pageParam,
             ...(searchString ? { search: searchString } : {}),
         },
+        signal,
     });
 
 export interface GetCharacterProps {
@@ -40,4 +42,4 @@ export interface GetCharacterProps {
 export const getCharacter = ({
     characterId,
 }: GetCharacterProps): Promise<AxiosResponse<Character>> =>
-    api.get<Character>(`/people/${characterId}`);
+    api.get<Character>(`${BASE_URL}/people/${characterId}`);

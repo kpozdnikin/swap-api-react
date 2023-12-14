@@ -18,15 +18,9 @@ export interface UseCharactersResult {
 export const useCharacters = (
     searchString?: string,
 ): UseInfiniteQueryResult<AxiosResponse<GetCharactersResponse>> =>
-    useInfiniteQuery(getCharactersQueryKey(searchString), () => getCharacters({ searchString }), {
-        getNextPageParam: (
-            lastPage: AxiosResponse<GetCharactersResponse>,
-            pages: Array<AxiosResponse<GetCharactersResponse>>,
-        ) => {
-            if (lastPage.data.next) {
-                return pages.length + 1;
-            }
-
-            return pages.length;
-        },
+    useInfiniteQuery({
+        queryKey: getCharactersQueryKey(searchString),
+        queryFn: ({ pageParam, signal }: { pageParam?: string, signal?: AbortSignal }) =>
+            getCharacters({ searchString, pageParam, signal }),
+        getNextPageParam: (lastPage: AxiosResponse<GetCharactersResponse>) => lastPage.data.next,
     });
